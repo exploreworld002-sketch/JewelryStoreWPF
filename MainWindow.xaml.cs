@@ -351,7 +351,6 @@ namespace JewelryStoreWPF
                 Canvas.SetLeft(particle, random.Next(0, (int)this.Width));
                 Canvas.SetTop(particle, random.Next(0, (int)this.Height));
 
-                ParticleCanvas.Children.Add(particle);
                 particles.Add(particle);
             }
         }
