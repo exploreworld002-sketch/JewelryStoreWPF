@@ -1,0 +1,582 @@
+﻿<Window x:Class="JewelryStoreWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="💎 Luxury Jewelry Management System" 
+        Height="1000" Width="1600"
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+
+    <Window.Resources>
+        <!-- Dark Theme Glassmorphism Style -->
+        <Style x:Key="GlassPanelDark" TargetType="Border">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="White" Opacity="0.08"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="White" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="3" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Light Theme Glassmorphism Style -->
+        <Style x:Key="GlassPanelLight" TargetType="Border">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="White" Opacity="0.7"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="Gray" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern Button Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#667eea" Offset="0"/>
+                        <GradientStop Color="#764ba2" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="15"
+                                Effect="{TemplateBinding Effect}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#667eea" BlurRadius="20" ShadowDepth="0" Opacity="0.8"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#7c8ef0" Offset="0"/>
+                                            <GradientStop Color="#8a5cb8" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Stats Card Style -->
+        <Style x:Key="StatsCard" TargetType="Border">
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="25" ShadowDepth="3" Opacity="0.25"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#667eea" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Dark Navigation Button Style -->
+        <Style x:Key="NavButtonDark" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="12" 
+                                Margin="10,5">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Light Navigation Button Style -->
+        <Style x:Key="NavButtonLight" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="12" 
+                                Margin="10,5">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Dark ListView Style -->
+        <Style x:Key="ListViewDark" TargetType="ListView">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- Light ListView Style -->
+        <Style x:Key="ListViewLight" TargetType="ListView">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#333333"/>
+        </Style>
+
+        <!-- Dark TextBlock Style -->
+        <Style x:Key="TextBlockDark" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- Light TextBlock Style -->
+        <Style x:Key="TextBlockLight" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#333333"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Main Container with Animated Background -->
+    <Grid Name="MainGrid">
+        <Grid.Background>
+            <RadialGradientBrush GradientOrigin="0.3,0.3">
+                <GradientStop Color="#0f0f23" Offset="0"/>
+                <GradientStop Color="#1a1a2e" Offset="0.5"/>
+                <GradientStop Color="#16213e" Offset="1"/>
+            </RadialGradientBrush>
+        </Grid.Background>
+
+        <!-- Animated Background Particles -->
+        <Canvas Name="ParticleCanvas" ClipToBounds="True"/>
+
+        <!-- Custom Title Bar -->
+        <Border Height="50" VerticalAlignment="Top" 
+                Background="Transparent" 
+                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid>
+                <StackPanel Orientation="Horizontal" 
+                           HorizontalAlignment="Left" 
+                           VerticalAlignment="Center" 
+                           Margin="20,0">
+                    <TextBlock Text="💎" FontSize="20" VerticalAlignment="Center" Name="TitleIcon" Style="{StaticResource TextBlockDark}"/>
+                    <TextBlock Text="LUXURY JEWELRY STORE" 
+                              FontSize="16" 
+                              FontWeight="Bold" 
+                              VerticalAlignment="Center" 
+                              Margin="10,0"
+                              Name="TitleText"
+                              Style="{StaticResource TextBlockDark}"/>
+                </StackPanel>
+
+                <!-- Window Controls -->
+                <StackPanel Orientation="Horizontal" 
+                           HorizontalAlignment="Right" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0">
+                    <Button Content="🌙" 
+                           Width="40" Height="30" 
+                           Background="Transparent" 
+                           Foreground="White" 
+                           BorderThickness="0" 
+                           FontSize="14"
+                           Click="ThemeToggle_Click"
+                           Cursor="Hand"
+                           Name="ThemeToggleButton"/>
+                    <Button Content="−" 
+                           Width="40" Height="30" 
+                           Background="Transparent" 
+                           Foreground="White" 
+                           BorderThickness="0" 
+                           FontSize="16"
+                           Click="Minimize_Click"
+                           Cursor="Hand"/>
+                    <Button Content="✕" 
+                           Width="40" Height="30" 
+                           Background="Transparent" 
+                           Foreground="#ff6b6b" 
+                           BorderThickness="0" 
+                           FontSize="14"
+                           Click="Close_Click"
+                           Cursor="Hand"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Grid -->
+        <Grid Margin="0,50,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Glassmorphism Sidebar -->
+            <Border Grid.Column="0" Name="SidebarBorder" Style="{StaticResource GlassPanelDark}" Margin="20">
+                <Grid>
+                    <StackPanel Margin="0,30,0,0" Name="NavigationPanel">
+                        <!-- Navigation Menu -->
+                        <Button Content="🏠  Dashboard" Name="DashboardBtn" Style="{StaticResource NavButtonDark}" Background="#667eea"/>
+                        <Button Content="👥  Customers" Name="CustomersBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="💍  Inventory" Name="InventoryBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="💰  Sales" Name="SalesBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="🛒  Purchase" Name="PurchaseBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="📊  Analytics" Name="AnalyticsBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="📈  Reports" Name="ReportsBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="⚙️  Settings" Name="SettingsBtn" Style="{StaticResource NavButtonDark}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Main Content Area -->
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="20">
+                <StackPanel>
+                    <!-- Welcome Section -->
+                    <Border CornerRadius="25" Margin="0,0,0,30" Name="WelcomeBorder">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#667eea" Offset="0"/>
+                                <GradientStop Color="#764ba2" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Border.Effect>
+                            <DropShadowEffect Color="#667eea" BlurRadius="30" ShadowDepth="0" Opacity="0.4"/>
+                        </Border.Effect>
+                        <Grid Height="150">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Margin="40">
+                                <TextBlock Text="Welcome back, Admin! ✨" 
+                                          FontSize="32" 
+                                          FontWeight="Bold" 
+                                          Foreground="White"/>
+                                <TextBlock Name="DateTimeText"
+                                          Text="Loading..." 
+                                          FontSize="16" 
+                                          Foreground="White" 
+                                          Opacity="0.8" 
+                                          Margin="0,10,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Stats Cards Grid -->
+                    <Grid Margin="0,0,0,30" Name="StatsGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Total Sales Card -->
+                        <Border Grid.Column="0" Style="{StaticResource StatsCard}" Margin="0,0,15,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#43e97b" Offset="0"/>
+                                    <GradientStop Color="#38f9d7" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid Height="160">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="💰" FontSize="40" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Total Sales Today" 
+                                              FontSize="14" 
+                                              Foreground="White" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,10,0,0"/>
+                                    <TextBlock Text="₹2,45,000" 
+                                              FontSize="24" 
+                                              FontWeight="Bold" 
+                                              Foreground="White" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,5,0,0"/>
+                                    <TextBlock Text="+12.5% from yesterday" 
+                                              FontSize="12" 
+                                              Foreground="White" 
+                                              Opacity="0.8" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Orders Pending Card -->
+                        <Border Grid.Column="1" Style="{StaticResource StatsCard}" Margin="15,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#f093fb" Offset="0"/>
+                                    <GradientStop Color="#f5576c" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid Height="160">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="⏳" FontSize="40" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Orders Pending" 
+                                              FontSize="14" 
+                                              Foreground="White" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,10,0,0"/>
+                                    <TextBlock Text="23" 
+                                              FontSize="24" 
+                                              FontWeight="Bold" 
+                                              Foreground="White" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,5,0,0"/>
+                                    <TextBlock Text="+8.2% from yesterday" 
+                                              FontSize="12" 
+                                              Foreground="White" 
+                                              Opacity="0.8" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Total Customers Card -->
+                        <Border Grid.Column="2" Style="{StaticResource StatsCard}" Margin="15,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#4facfe" Offset="0"/>
+                                    <GradientStop Color="#00f2fe" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid Height="160">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="👥" FontSize="40" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Total Customers" 
+                                              FontSize="14" 
+                                              Foreground="White" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,10,0,0"/>
+                                    <TextBlock Text="1,247" 
+                                              FontSize="24" 
+                                              FontWeight="Bold" 
+                                              Foreground="White" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,5,0,0"/>
+                                    <TextBlock Text="+15.3% from yesterday" 
+                                              FontSize="12" 
+                                              Foreground="White" 
+                                              Opacity="0.8" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Inventory Value Card -->
+                        <Border Grid.Column="3" Style="{StaticResource StatsCard}" Margin="15,0,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#667eea" Offset="0"/>
+                                    <GradientStop Color="#764ba2" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid Height="160">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="💍" FontSize="40" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Inventory Value" 
+                                              FontSize="14" 
+                                              Foreground="White" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,10,0,0"/>
+                                    <TextBlock Text="₹45,67,890" 
+                                              FontSize="24" 
+                                              FontWeight="Bold" 
+                                              Foreground="White" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,5,0,0"/>
+                                    <TextBlock Text="+5.7% from yesterday" 
+                                              FontSize="12" 
+                                              Foreground="White" 
+                                              Opacity="0.8" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <!-- Charts and Quick Actions -->
+                    <Grid Margin="0,0,0,30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Sales Chart -->
+                        <Border Grid.Column="0" Name="ChartBorder" Style="{StaticResource GlassPanelDark}" Margin="0,0,15,0">
+                            <Grid Height="350">
+                                <StackPanel Margin="30">
+                                    <TextBlock Text="📈 Sales Analytics - Last 7 Days" 
+                                              FontSize="18" 
+                                              FontWeight="Bold" 
+                                              Margin="0,0,0,20"
+                                              Name="ChartTitle"
+                                              Style="{StaticResource TextBlockDark}"/>
+
+                                    <!-- Custom Chart Canvas -->
+                                    <Canvas Name="ChartCanvas" Height="250" Background="Transparent"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Quick Actions -->
+                        <Border Grid.Column="1" Name="QuickActionsBorder" Style="{StaticResource GlassPanelDark}" Margin="15,0,0,0">
+                            <Grid Height="350">
+                                <StackPanel Margin="30">
+                                    <TextBlock Text="⚡ Quick Actions" 
+                                              FontSize="18" 
+                                              FontWeight="Bold" 
+                                              Margin="0,0,0,20"
+                                              Name="QuickActionsTitle"
+                                              Style="{StaticResource TextBlockDark}"/>
+
+                                    <Button Content="🛍️ New Sale" Style="{StaticResource ModernButton}" Margin="0,0,0,15"/>
+                                    <Button Content="👤 Add Customer" Style="{StaticResource ModernButton}" Margin="0,0,0,15"/>
+                                    <Button Content="💍 Add Product" Style="{StaticResource ModernButton}" Margin="0,0,0,15"/>
+                                    <Button Content="📊 Generate Report" Style="{StaticResource ModernButton}" Margin="0,0,0,15"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <!-- Recent Sales and Alerts -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Recent Sales -->
+                        <Border Grid.Column="0" Name="SalesBorder" Style="{StaticResource GlassPanelDark}" Margin="0,0,15,0">
+                            <Grid Height="400">
+                                <StackPanel Margin="30">
+                                    <TextBlock Text="🛍️ Recent Sales" 
+                                              FontSize="18" 
+                                              FontWeight="Bold" 
+                                              Margin="0,0,0,20"
+                                              Name="SalesTitle"
+                                              Style="{StaticResource TextBlockDark}"/>
+
+                                    <ListView Name="SalesListView" 
+                                             Height="300"
+                                             Style="{StaticResource ListViewDark}">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="Customer" Width="150" DisplayMemberBinding="{Binding CustomerName}"/>
+                                                <GridViewColumn Header="Item" Width="120" DisplayMemberBinding="{Binding Item}"/>
+                                                <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Amount, StringFormat=₹{0:N0}}"/>
+                                                <GridViewColumn Header="Date" Width="80" DisplayMemberBinding="{Binding Date, StringFormat=MMM dd}"/>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Low Stock Alerts -->
+                        <Border Grid.Column="1" Name="AlertsBorder" Style="{StaticResource GlassPanelDark}" Margin="15,0,0,0">
+                            <Grid Height="400">
+                                <StackPanel Margin="30">
+                                    <TextBlock Text="⚠️ Low Stock Alerts" 
+                                              FontSize="18" 
+                                              FontWeight="Bold" 
+                                              Foreground="#ff6b6b" 
+                                              Margin="0,0,0,20"/>
+
+                                    <StackPanel Name="AlertsPanel"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>
