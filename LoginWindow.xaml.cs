@@ -522,9 +522,8 @@ namespace JewelryStoreWPF
                     EyeToggleButton.Content = "🙈";
 
                     // Force style
-                    PasswordTextBox.FontFamily = new FontFamily("Segoe UI");
-                    PasswordTextBox.FontWeight = FontWeights.Bold;
-
+                    PasswordTextBox.FontFamily = new FontFamily("Segoe UI Black");
+                    PasswordTextBox.FontSize = 16;
                     PasswordTextBox.Focus();
                     PasswordTextBox.CaretIndex = PasswordTextBox.Text.Length;
                 }
@@ -536,12 +535,10 @@ namespace JewelryStoreWPF
                     EyeToggleButton.Content = "👁";
 
                     // Force style
-                    PasswordBox.FontFamily = new FontFamily("Segoe UI");
-                    PasswordBox.FontWeight = FontWeights.Bold;
-
+                    PasswordBox.FontFamily = new FontFamily("Segoe UI Black");
+                    PasswordTextBox.FontSize = 16;
                     PasswordBox.Focus();
                 }
-
 
                 // Apply correct theme style to ensure visibility
                 ApplyEyeButtonTheme();
