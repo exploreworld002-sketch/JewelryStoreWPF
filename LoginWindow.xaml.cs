@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace JewelryStoreWPF
 {
     public partial class LoginWindow : Window
     {
-        private DispatcherTimer particleTimer;
-        private DispatcherTimer logoAnimationTimer;
-        private List<Ellipse> particles;
-        private Random random = new Random();
         private bool isDarkMode = true;
+        private bool isPasswordVisible = false;
 
         // Login credentials
         private const string VALID_USERNAME = "admin";
@@ -26,187 +20,56 @@ namespace JewelryStoreWPF
         public LoginWindow()
         {
             InitializeComponent();
-            InitializeAnimations();
-            CreateParticles();
-            StartEntranceAnimations();
 
-            // Set focus to username textbox
-            UsernameTextBox.Focus();
+            // Set focus to username textbox after window loads
+            this.Loaded += (s, e) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    UsernameTextBox.Focus();
+                }), DispatcherPriority.ApplicationIdle);
+            };
 
             // Add key handlers for Enter key
             UsernameTextBox.KeyDown += InputKeyDown;
             PasswordBox.KeyDown += InputKeyDown;
+            PasswordTextBox.KeyDown += InputKeyDown;
+
+            // Sync password fields
+            PasswordBox.PasswordChanged += PasswordBox_PasswordChanged;
+            PasswordTextBox.TextChanged += PasswordTextBox_TextChanged;
         }
 
-        private void InitializeAnimations()
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            // Logo pulsing animation
-            logoAnimationTimer = new DispatcherTimer
+            try
             {
-                Interval = TimeSpan.FromSeconds(3)
-            };
-            logoAnimationTimer.Tick += (s, e) => AnimateLogo();
-            logoAnimationTimer.Start();
-        }
-
-        private void CreateParticles()
-        {
-            particles = new List<Ellipse>();
-
-            for (int i = 0; i < 25; i++)
-            {
-                var particle = new Ellipse
+                if (!isPasswordVisible && PasswordBox.Password != PasswordTextBox.Text)
                 {
-                    Width = random.Next(2, 5),
-                    Height = random.Next(2, 5),
-                    Fill = new SolidColorBrush(Color.FromArgb((byte)random.Next(30, 100), 255, 255, 255)),
-                    Opacity = random.NextDouble() * 0.7 + 0.3
-                };
-
-                Canvas.SetLeft(particle, random.Next(0, (int)this.Width));
-                Canvas.SetTop(particle, random.Next(0, (int)this.Height));
-
-                ParticleCanvas.Children.Add(particle);
-                particles.Add(particle);
-            }
-
-            // Start particle animation
-            particleTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromMilliseconds(100)
-            };
-            particleTimer.Tick += (s, e) => AnimateParticles();
-            particleTimer.Start();
-        }
-
-        private void AnimateParticles()
-        {
-            foreach (var particle in particles)
-            {
-                var currentX = Canvas.GetLeft(particle);
-                var currentY = Canvas.GetTop(particle);
-
-                var newX = currentX + (random.NextDouble() - 0.5) * 3;
-                var newY = currentY + (random.NextDouble() - 0.5) * 3;
-
-                // Wrap around screen
-                if (newX < 0) newX = this.ActualWidth;
-                if (newX > this.ActualWidth) newX = 0;
-                if (newY < 0) newY = this.ActualHeight;
-                if (newY > this.ActualHeight) newY = 0;
-
-                Canvas.SetLeft(particle, newX);
-                Canvas.SetTop(particle, newY);
-
-                // Random opacity changes
-                if (random.NextDouble() < 0.02)
-                {
-                    var opacityAnimation = new DoubleAnimation(
-                        particle.Opacity,
-                        random.NextDouble() * 0.7 + 0.3,
-                        TimeSpan.FromMilliseconds(1500));
-                    particle.BeginAnimation(OpacityProperty, opacityAnimation);
+                    PasswordTextBox.Text = PasswordBox.Password;
+                    System.Diagnostics.Debug.WriteLine($"PasswordBox changed: {PasswordBox.Password.Length} chars");
                 }
             }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"PasswordBox_PasswordChanged error: {ex.Message}");
+            }
         }
 
-        private void AnimateLogo()
+        private void PasswordTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Pulsing glow effect
-            var glowAnimation = new DoubleAnimation(0.6, 1.0, TimeSpan.FromMilliseconds(1500))
+            try
             {
-                AutoReverse = true,
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-            };
-
-            LogoBorder.Effect.BeginAnimation(DropShadowEffect.OpacityProperty, glowAnimation);
-
-            // Subtle scale animation
-            var scaleTransform = new ScaleTransform(1.0, 1.0, 100, 100);
-            LogoBorder.RenderTransform = scaleTransform;
-
-            var scaleAnimation = new DoubleAnimation(1.0, 1.05, TimeSpan.FromMilliseconds(1500))
+                if (isPasswordVisible && PasswordTextBox.Text != PasswordBox.Password)
+                {
+                    PasswordBox.Password = PasswordTextBox.Text;
+                    System.Diagnostics.Debug.WriteLine($"PasswordTextBox changed: {PasswordTextBox.Text.Length} chars");
+                }
+            }
+            catch (Exception ex)
             {
-                AutoReverse = true,
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-            };
-
-            scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
-            scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
-        }
-
-        private void StartEntranceAnimations()
-        {
-            // Hide elements initially
-            LoginBorder.Opacity = 0;
-            LoginBorder.RenderTransform = new TranslateTransform(0, 100);
-
-            FeaturesPanel.Opacity = 0;
-            FeaturesPanel.RenderTransform = new TranslateTransform(-50, 0);
-
-            StatsPreview.Opacity = 0;
-            StatsPreview.RenderTransform = new TranslateTransform(50, 0);
-
-            LogoBorder.Opacity = 0;
-            LogoBorder.RenderTransform = new ScaleTransform(0.5, 0.5, 100, 100);
-
-            // Animate logo entrance
-            var logoFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(1000))
-            {
-                BeginTime = TimeSpan.FromMilliseconds(200),
-                EasingFunction = new BackEase { Amplitude = 0.3, EasingMode = EasingMode.EaseOut }
-            };
-            LogoBorder.BeginAnimation(OpacityProperty, logoFadeIn);
-
-            var logoScaleIn = new DoubleAnimation(0.5, 1.0, TimeSpan.FromMilliseconds(1000))
-            {
-                BeginTime = TimeSpan.FromMilliseconds(200),
-                EasingFunction = new BackEase { Amplitude = 0.3, EasingMode = EasingMode.EaseOut }
-            };
-            LogoBorder.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, logoScaleIn);
-            LogoBorder.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, logoScaleIn);
-
-            // Animate login form entrance
-            var formFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(800))
-            {
-                BeginTime = TimeSpan.FromMilliseconds(600)
-            };
-            LoginBorder.BeginAnimation(OpacityProperty, formFadeIn);
-
-            var formSlideIn = new DoubleAnimation(100, 0, TimeSpan.FromMilliseconds(800))
-            {
-                BeginTime = TimeSpan.FromMilliseconds(600),
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-            };
-            LoginBorder.RenderTransform.BeginAnimation(TranslateTransform.YProperty, formSlideIn);
-
-            // Animate features panel
-            var featuresFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(800))
-            {
-                BeginTime = TimeSpan.FromMilliseconds(1000)
-            };
-            FeaturesPanel.BeginAnimation(OpacityProperty, featuresFadeIn);
-
-            var featuresSlideIn = new DoubleAnimation(-50, 0, TimeSpan.FromMilliseconds(800))
-            {
-                BeginTime = TimeSpan.FromMilliseconds(1000),
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-            };
-            FeaturesPanel.RenderTransform.BeginAnimation(TranslateTransform.XProperty, featuresSlideIn);
-
-            // Animate stats preview
-            var statsFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(800))
-            {
-                BeginTime = TimeSpan.FromMilliseconds(1200)
-            };
-            StatsPreview.BeginAnimation(OpacityProperty, statsFadeIn);
-
-            var statsSlideIn = new DoubleAnimation(50, 0, TimeSpan.FromMilliseconds(800))
-            {
-                BeginTime = TimeSpan.FromMilliseconds(1200),
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-            };
-            StatsPreview.RenderTransform.BeginAnimation(TranslateTransform.XProperty, statsSlideIn);
+                System.Diagnostics.Debug.WriteLine($"PasswordTextBox_TextChanged error: {ex.Message}");
+            }
         }
 
         private void InputKeyDown(object sender, KeyEventArgs e)
@@ -219,120 +82,227 @@ namespace JewelryStoreWPF
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string username = UsernameTextBox.Text.Trim();
-            string password = PasswordBox.Password;
-
-            // Hide any existing error
-            HideError();
-
-            // Validate credentials
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            try
             {
-                ShowError("Please enter both username and password!");
-                return;
+                string username = UsernameTextBox.Text.Trim();
+                string password = isPasswordVisible ? PasswordTextBox.Text : PasswordBox.Password;
+
+                // Hide any existing error
+                HideError();
+
+                // Validate credentials
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                {
+                    ShowError("Please enter both username and password!");
+                    return;
+                }
+
+                if (username == VALID_USERNAME && password == VALID_PASSWORD)
+                {
+                    // Success! Show success notification and redirect
+                    ShowSuccessAndRedirect();
+                }
+                else
+                {
+                    // Show error with simple animation
+                    ShowError("Invalid username or password!");
+
+                    // Simple shake animation
+                    ShakeLoginForm();
+                }
             }
-
-            if (username == VALID_USERNAME && password == VALID_PASSWORD)
+            catch (Exception ex)
             {
-                // Success! Show success notification and redirect
-                ShowSuccessAndRedirect();
+                System.Diagnostics.Debug.WriteLine($"LoginButton_Click error: {ex.Message}");
+                ShowError("An error occurred during login. Please try again.");
             }
-            else
-            {
-                // Show error with animation
-                ShowError("Invalid username or password!");
+        }
 
-                // Shake animation for login form
-                ShakeLoginForm();
+        private void EyeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                isPasswordVisible = !isPasswordVisible;
+
+                if (isPasswordVisible)
+                {
+                    // Show password as plain text
+                    PasswordTextBox.Text = PasswordBox.Password;
+                    PasswordBox.Visibility = Visibility.Collapsed;
+                    PasswordTextBox.Visibility = Visibility.Visible;
+                    EyeToggleButton.Content = "🙈"; // Eye closed - password is visible
+
+                    // Set focus and cursor position
+                    PasswordTextBox.Focus();
+                    PasswordTextBox.CaretIndex = PasswordTextBox.Text.Length;
+                }
+                else
+                {
+                    // Hide password (show dots)
+                    PasswordBox.Password = PasswordTextBox.Text;
+                    PasswordTextBox.Visibility = Visibility.Collapsed;
+                    PasswordBox.Visibility = Visibility.Visible;
+                    EyeToggleButton.Content = "👁"; // Eye open - password is hidden
+
+                    // Set focus to password box
+                    PasswordBox.Focus();
+                }
+
+                // Apply correct theme style to ensure visibility
+                ApplyEyeButtonTheme();
+
+                System.Diagnostics.Debug.WriteLine($"Password visibility toggled to: {isPasswordVisible}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"EyeToggle_Click error: {ex.Message}");
+            }
+        }
+
+        private void ApplyEyeButtonTheme()
+        {
+            try
+            {
+                Style eyeStyle = isDarkMode ?
+                    FindResource("EyeToggleButton") as Style :
+                    FindResource("EyeToggleButtonLight") as Style;
+
+                if (eyeStyle != null)
+                {
+                    EyeToggleButton.Style = eyeStyle;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"ApplyEyeButtonTheme error: {ex.Message}");
             }
         }
 
         private void ShowError(string message)
         {
-            ErrorText.Text = message;
-            ErrorBorder.Visibility = Visibility.Visible;
-            ErrorBorder.Opacity = 0;
-
-            // Animate error appearance
-            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(300));
-            ErrorBorder.BeginAnimation(OpacityProperty, fadeIn);
-
-            // Auto-hide after 4 seconds
-            var timer = new DispatcherTimer
+            try
             {
-                Interval = TimeSpan.FromSeconds(4)
-            };
-            timer.Tick += (s, e) =>
+                ErrorText.Text = message;
+                ErrorBorder.Visibility = Visibility.Visible;
+                ErrorBorder.Opacity = 0;
+
+                // Simple fade in animation
+                var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(200));
+                ErrorBorder.BeginAnimation(OpacityProperty, fadeIn);
+
+                // Auto-hide after 3 seconds
+                var timer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(3)
+                };
+                timer.Tick += (s, e) =>
+                {
+                    timer.Stop();
+                    HideError();
+                };
+                timer.Start();
+            }
+            catch (Exception ex)
             {
-                timer.Stop();
-                HideError();
-            };
-            timer.Start();
+                System.Diagnostics.Debug.WriteLine($"ShowError error: {ex.Message}");
+            }
         }
 
         private void HideError()
         {
-            if (ErrorBorder.Visibility == Visibility.Visible)
+            try
             {
-                var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(300));
-                fadeOut.Completed += (s, e) => ErrorBorder.Visibility = Visibility.Collapsed;
-                ErrorBorder.BeginAnimation(OpacityProperty, fadeOut);
+                if (ErrorBorder.Visibility == Visibility.Visible)
+                {
+                    var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(200));
+                    fadeOut.Completed += (s, e) => ErrorBorder.Visibility = Visibility.Collapsed;
+                    ErrorBorder.BeginAnimation(OpacityProperty, fadeOut);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"HideError error: {ex.Message}");
             }
         }
 
         private void ShakeLoginForm()
         {
-            var shakeTransform = new TranslateTransform();
-            LoginBorder.RenderTransform = shakeTransform;
+            try
+            {
+                var shakeTransform = new TranslateTransform();
+                LoginBorder.RenderTransform = shakeTransform;
 
-            var shakeAnimation = new DoubleAnimationUsingKeyFrames();
-            shakeAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0, TimeSpan.FromMilliseconds(0)));
-            shakeAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(-10, TimeSpan.FromMilliseconds(100)));
-            shakeAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(10, TimeSpan.FromMilliseconds(200)));
-            shakeAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(-5, TimeSpan.FromMilliseconds(300)));
-            shakeAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(5, TimeSpan.FromMilliseconds(400)));
-            shakeAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0, TimeSpan.FromMilliseconds(500)));
+                // Simple shake animation
+                var shakeAnimation = new DoubleAnimation(0, -8, TimeSpan.FromMilliseconds(50))
+                {
+                    AutoReverse = true,
+                    RepeatBehavior = new RepeatBehavior(3)
+                };
 
-            shakeTransform.BeginAnimation(TranslateTransform.XProperty, shakeAnimation);
+                shakeTransform.BeginAnimation(TranslateTransform.XProperty, shakeAnimation);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"ShakeLoginForm error: {ex.Message}");
+            }
         }
 
         private void ShowSuccessAndRedirect()
         {
-            // Show success notification
-            SuccessNotification.Visibility = Visibility.Visible;
-            SuccessNotification.Opacity = 0;
-
-            var successFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(400));
-            SuccessNotification.BeginAnimation(OpacityProperty, successFadeIn);
-
-            // Disable login form
-            LoginButton.IsEnabled = false;
-            UsernameTextBox.IsEnabled = false;
-            PasswordBox.IsEnabled = false;
-
-            // Redirect after 2 seconds
-            var redirectTimer = new DispatcherTimer
+            try
             {
-                Interval = TimeSpan.FromSeconds(2)
-            };
-            redirectTimer.Tick += (s, e) =>
-            {
-                redirectTimer.Stop();
+                // Show success notification
+                SuccessNotification.Visibility = Visibility.Visible;
+                SuccessNotification.Opacity = 0;
 
-                // Fade out login window
-                var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(500));
-                fadeOut.Completed += (sender, args) =>
+                var successFadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(300));
+                SuccessNotification.BeginAnimation(OpacityProperty, successFadeIn);
+
+                // Disable login form
+                LoginButton.IsEnabled = false;
+                UsernameTextBox.IsEnabled = false;
+                PasswordBox.IsEnabled = false;
+                PasswordTextBox.IsEnabled = false;
+                EyeToggleButton.IsEnabled = false;
+
+                // Redirect after 0 second
+                var redirectTimer = new DispatcherTimer
                 {
-                    // Open main dashboard
-                    var mainWindow = new MainWindow();
-                    mainWindow.Show();
-
-                    // Close login window
-                    //         this.Close();
+                    Interval = TimeSpan.FromSeconds(0)
                 };
-                this.BeginAnimation(OpacityProperty, fadeOut);
-            };
-            redirectTimer.Start();
+                redirectTimer.Tick += (s, e) =>
+                {
+                    redirectTimer.Stop();
+
+                    // Simple fade out
+                    var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(300));
+                    fadeOut.Completed += (sender, args) =>
+                    {
+                        try
+                        {
+                            // Open main dashboard (assuming MainWindow exists)
+                            var mainWindow = new MainWindow();
+                            Application.Current.MainWindow = mainWindow;
+                            mainWindow.Show();
+
+                            // Close login window
+                            this.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Redirect error: {ex.Message}");
+                            // If MainWindow doesn't exist, just close the login
+                            this.Close();
+                        }
+                    };
+                    this.BeginAnimation(OpacityProperty, fadeOut);
+                };
+                redirectTimer.Start();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"ShowSuccessAndRedirect error: {ex.Message}");
+            }
         }
 
         private void ThemeToggle_Click(object sender, RoutedEventArgs e)
@@ -355,15 +325,16 @@ namespace JewelryStoreWPF
                 // Update theme toggle button
                 ThemeToggleButton.Content = isDarkMode ? "🌙" : "☀️";
 
-                // Create gradient brushes for background
-                RadialGradientBrush gradientBrush;
+                // Create simple gradient brushes for background
+                LinearGradientBrush gradientBrush;
 
                 if (isDarkMode)
                 {
                     // Apply dark theme
-                    gradientBrush = new RadialGradientBrush
+                    gradientBrush = new LinearGradientBrush
                     {
-                        GradientOrigin = new Point(0.3, 0.3),
+                        StartPoint = new Point(0, 0),
+                        EndPoint = new Point(1, 1),
                         GradientStops = new GradientStopCollection
                         {
                             new GradientStop(Color.FromRgb(15, 15, 35), 0),
@@ -377,9 +348,10 @@ namespace JewelryStoreWPF
                 else
                 {
                     // Apply light theme
-                    gradientBrush = new RadialGradientBrush
+                    gradientBrush = new LinearGradientBrush
                     {
-                        GradientOrigin = new Point(0.3, 0.3),
+                        StartPoint = new Point(0, 0),
+                        EndPoint = new Point(1, 1),
                         GradientStops = new GradientStopCollection
                         {
                             new GradientStop(Color.FromRgb(245, 247, 250), 0),
@@ -394,14 +366,11 @@ namespace JewelryStoreWPF
                 // Apply the background
                 MainGrid.Background = gradientBrush;
 
-                // Animate the theme change
-                var themeAnimation = new DoubleAnimation(0.8, 1.0, TimeSpan.FromMilliseconds(400))
-                {
-                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-                };
+                // Simple theme change animation
+                var themeAnimation = new DoubleAnimation(0.9, 1.0, TimeSpan.FromMilliseconds(200));
                 MainGrid.BeginAnimation(OpacityProperty, themeAnimation);
 
-                System.Diagnostics.Debug.WriteLine($"Login Theme changed to: {(isDarkMode ? "Dark" : "Light")}");
+                System.Diagnostics.Debug.WriteLine($"Theme changed to: {(isDarkMode ? "Dark" : "Light")}");
             }
             catch (Exception ex)
             {
@@ -413,39 +382,43 @@ namespace JewelryStoreWPF
         {
             try
             {
-                var darkGlassStyle = FindResource("GlassPanelDark") as Style;
-                var darkTextStyle = FindResource("TextBlockDark") as Style;
-                var darkTextBoxStyle = FindResource("ModernTextBoxDark") as Style;
-                var darkPasswordStyle = FindResource("ModernPasswordBoxDark") as Style;
-
-                if (darkGlassStyle != null)
+                // Apply dark theme styles
+                var resources = new[]
                 {
-                    LoginBorder.Style = darkGlassStyle;
+                    new { Element = (FrameworkElement)LoginBorder, StyleKey = "GlassPanelDark" },
+                    new { Element = (FrameworkElement)UsernameTextBox, StyleKey = "ModernTextBoxDark" },
+                    new { Element = (FrameworkElement)PasswordTextBox, StyleKey = "ModernTextBoxDark" },
+                    new { Element = (FrameworkElement)PasswordBox, StyleKey = "ModernPasswordBoxDark" },
+                    new { Element = (FrameworkElement)EyeToggleButton, StyleKey = "EyeToggleButton" }
+                };
+
+                foreach (var item in resources)
+                {
+                    var style = FindResource(item.StyleKey) as Style;
+                    if (style != null && item.Element != null)
+                    {
+                        item.Element.Style = style;
+                    }
                 }
 
+                // Apply text styles
+                var textElements = new FrameworkElement[]
+                {
+                    TitleIcon, TitleText, BrandTitle, BrandSubtitle, BrandDescription,
+                    LoginTitle, LoginSubtitle, UsernameLabel, PasswordLabel,
+                    FooterText1, FooterText2
+                };
+
+                var darkTextStyle = FindResource("TextBlockDark") as Style;
                 if (darkTextStyle != null)
                 {
-                    TitleIcon.Style = darkTextStyle;
-                    TitleText.Style = darkTextStyle;
-                    BrandTitle.Style = darkTextStyle;
-                    BrandSubtitle.Style = darkTextStyle;
-                    BrandDescription.Style = darkTextStyle;
-                    LoginTitle.Style = darkTextStyle;
-                    LoginSubtitle.Style = darkTextStyle;
-                    UsernameLabel.Style = darkTextStyle;
-                    PasswordLabel.Style = darkTextStyle;
-                    FooterText1.Style = darkTextStyle;
-                    FooterText2.Style = darkTextStyle;
-                }
-
-                if (darkTextBoxStyle != null)
-                {
-                    UsernameTextBox.Style = darkTextBoxStyle;
-                }
-
-                if (darkPasswordStyle != null)
-                {
-                    PasswordBox.Style = darkPasswordStyle;
+                    foreach (var element in textElements)
+                    {
+                        if (element != null)
+                        {
+                            element.Style = darkTextStyle;
+                        }
+                    }
                 }
 
                 ThemeToggleButton.Foreground = Brushes.White;
@@ -460,39 +433,43 @@ namespace JewelryStoreWPF
         {
             try
             {
-                var lightGlassStyle = FindResource("GlassPanelLight") as Style;
-                var lightTextStyle = FindResource("TextBlockLight") as Style;
-                var lightTextBoxStyle = FindResource("ModernTextBoxLight") as Style;
-                var lightPasswordStyle = FindResource("ModernPasswordBoxLight") as Style;
-
-                if (lightGlassStyle != null)
+                // Apply light theme styles
+                var resources = new[]
                 {
-                    LoginBorder.Style = lightGlassStyle;
+                    new { Element = (FrameworkElement)LoginBorder, StyleKey = "GlassPanelLight" },
+                    new { Element = (FrameworkElement)UsernameTextBox, StyleKey = "ModernTextBoxLight" },
+                    new { Element = (FrameworkElement)PasswordTextBox, StyleKey = "ModernTextBoxLight" },
+                    new { Element = (FrameworkElement)PasswordBox, StyleKey = "ModernPasswordBoxLight" },
+                    new { Element = (FrameworkElement)EyeToggleButton, StyleKey = "EyeToggleButtonLight" }
+                };
+
+                foreach (var item in resources)
+                {
+                    var style = FindResource(item.StyleKey) as Style;
+                    if (style != null && item.Element != null)
+                    {
+                        item.Element.Style = style;
+                    }
                 }
 
+                // Apply text styles
+                var textElements = new FrameworkElement[]
+                {
+                    TitleIcon, TitleText, BrandTitle, BrandSubtitle, BrandDescription,
+                    LoginTitle, LoginSubtitle, UsernameLabel, PasswordLabel,
+                    FooterText1, FooterText2
+                };
+
+                var lightTextStyle = FindResource("TextBlockLight") as Style;
                 if (lightTextStyle != null)
                 {
-                    TitleIcon.Style = lightTextStyle;
-                    TitleText.Style = lightTextStyle;
-                    BrandTitle.Style = lightTextStyle;
-                    BrandSubtitle.Style = lightTextStyle;
-                    BrandDescription.Style = lightTextStyle;
-                    LoginTitle.Style = lightTextStyle;
-                    LoginSubtitle.Style = lightTextStyle;
-                    UsernameLabel.Style = lightTextStyle;
-                    PasswordLabel.Style = lightTextStyle;
-                    FooterText1.Style = lightTextStyle;
-                    FooterText2.Style = lightTextStyle;
-                }
-
-                if (lightTextBoxStyle != null)
-                {
-                    UsernameTextBox.Style = lightTextBoxStyle;
-                }
-
-                if (lightPasswordStyle != null)
-                {
-                    PasswordBox.Style = lightPasswordStyle;
+                    foreach (var element in textElements)
+                    {
+                        if (element != null)
+                        {
+                            element.Style = lightTextStyle;
+                        }
+                    }
                 }
 
                 ThemeToggleButton.Foreground = new SolidColorBrush(Color.FromRgb(51, 51, 51));
@@ -506,15 +483,22 @@ namespace JewelryStoreWPF
         // Window control events
         private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ButtonState == MouseButtonState.Pressed)
+            try
             {
-                this.DragMove();
+                if (e.ButtonState == MouseButtonState.Pressed)
+                {
+                    this.DragMove();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"TitleBar_MouseLeftButtonDown error: {ex.Message}");
             }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(400));
+            var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(200));
             fadeOut.Completed += (s, args) => Application.Current.Shutdown();
             this.BeginAnimation(OpacityProperty, fadeOut);
         }
@@ -524,11 +508,50 @@ namespace JewelryStoreWPF
             this.WindowState = WindowState.Minimized;
         }
 
-        protected override void OnClosed(EventArgs e)
+        private void EyeToggleButton_Click(object sender, RoutedEventArgs e)
         {
-            particleTimer?.Stop();
-            logoAnimationTimer?.Stop();
-            base.OnClosed(e);
+            try
+            {
+                isPasswordVisible = !isPasswordVisible;
+
+                if (isPasswordVisible)
+                {
+                    PasswordTextBox.Text = PasswordBox.Password;
+                    PasswordBox.Visibility = Visibility.Collapsed;
+                    PasswordTextBox.Visibility = Visibility.Visible;
+                    EyeToggleButton.Content = "🙈";
+
+                    // Force style
+                    PasswordTextBox.FontFamily = new FontFamily("Segoe UI");
+                    PasswordTextBox.FontWeight = FontWeights.Bold;
+
+                    PasswordTextBox.Focus();
+                    PasswordTextBox.CaretIndex = PasswordTextBox.Text.Length;
+                }
+                else
+                {
+                    PasswordBox.Password = PasswordTextBox.Text;
+                    PasswordTextBox.Visibility = Visibility.Collapsed;
+                    PasswordBox.Visibility = Visibility.Visible;
+                    EyeToggleButton.Content = "👁";
+
+                    // Force style
+                    PasswordBox.FontFamily = new FontFamily("Segoe UI");
+                    PasswordBox.FontWeight = FontWeights.Bold;
+
+                    PasswordBox.Focus();
+                }
+
+
+                // Apply correct theme style to ensure visibility
+                ApplyEyeButtonTheme();
+
+                System.Diagnostics.Debug.WriteLine($"Password visibility toggled to: {isPasswordVisible}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"EyeToggle_Click error: {ex.Message}");
+            }
         }
     }
 }

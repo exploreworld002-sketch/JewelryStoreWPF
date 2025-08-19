@@ -14,91 +14,66 @@
         SnapsToDevicePixels="True">
 
     <Window.Resources>
-        <!-- Dark Theme Glassmorphism Style -->
+        <!-- Simplified Cached Brushes -->
+        <SolidColorBrush x:Key="WhiteBrush05" Color="White" Opacity="0.05"/>
+        <SolidColorBrush x:Key="WhiteBrush1" Color="White" Opacity="0.1"/>
+        <SolidColorBrush x:Key="WhiteBrush3" Color="White" Opacity="0.3"/>
+        <SolidColorBrush x:Key="WhiteBrush8" Color="White" Opacity="0.8"/>
+        <SolidColorBrush x:Key="WhiteBrush9" Color="White" Opacity="0.9"/>
+        <SolidColorBrush x:Key="GrayBrush3" Color="Gray" Opacity="0.3"/>
+        <SolidColorBrush x:Key="GrayBrush4" Color="Gray" Opacity="0.4"/>
+        <SolidColorBrush x:Key="DarkTextBrush" Color="#333333"/>
+        <SolidColorBrush x:Key="WhiteBrush" Color="White"/>
+
+        <!-- Simplified Gradient Brushes -->
+        <LinearGradientBrush x:Key="MainGradientBrush" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#667eea" Offset="0"/>
+            <GradientStop Color="#764ba2" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Minimal Shadow Effects (reduced blur radius) -->
+        <DropShadowEffect x:Key="LightShadow" Color="Black" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
+        <DropShadowEffect x:Key="FocusGlow" Color="#667eea" BlurRadius="8" ShadowDepth="0" Opacity="0.3"/>
+
+        <!-- Simplified Glass Panel Dark -->
         <Style x:Key="GlassPanelDark" TargetType="Border">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.08"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.15"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Background" Value="{StaticResource WhiteBrush05}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource WhiteBrush1}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="25"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="5" Opacity="0.3"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="CornerRadius" Value="20"/>
         </Style>
 
-        <!-- Light Theme Glassmorphism Style -->
+        <!-- Simplified Glass Panel Light -->
         <Style x:Key="GlassPanelLight" TargetType="Border">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.8"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <SolidColorBrush Color="Gray" Opacity="0.3"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Background" Value="{StaticResource WhiteBrush8}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource GrayBrush3}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="25"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="Gray" BlurRadius="15" ShadowDepth="3" Opacity="0.3"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Effect" Value="{StaticResource LightShadow}"/>
         </Style>
 
-        <!-- Modern Input Box Style Dark -->
+        <!-- Fixed TextBox Styles with Visible Text -->
         <Style x:Key="ModernTextBoxDark" TargetType="TextBox">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.1"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.3"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="#26293a"/>
+            <Setter Property="Foreground" Value="#EAEAEA"/>
+            <Setter Property="BorderBrush" Value="#444"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="12,8"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="CaretBrush" Value="White"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
                         <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="15">
-                            <ScrollViewer x:Name="PART_ContentHost" 
-                                        Margin="{TemplateBinding Padding}"
-                                        VerticalAlignment="Center"/>
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="BorderBrush">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#667eea" Offset="0"/>
-                                            <GradientStop Color="#764ba2" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#667eea" BlurRadius="15" ShadowDepth="0" Opacity="0.5"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="BorderBrush" Value="{StaticResource MainGradientBrush}"/>
+                                <Setter Property="Background" Value="#30344d"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -106,49 +81,36 @@
             </Setter>
         </Style>
 
-        <!-- Modern Input Box Style Light -->
+
+
         <Style x:Key="ModernTextBoxLight" TargetType="TextBox">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.9"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Background" Value="#FFFFFF"/>
             <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <SolidColorBrush Color="Gray" Opacity="0.4"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="BorderBrush" Value="{StaticResource GrayBrush4}"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="CaretBrush" Value="#333333"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource MainGradientBrush}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
                         <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="15">
+                               BorderBrush="{TemplateBinding BorderBrush}"
+                               BorderThickness="{TemplateBinding BorderThickness}"
+                               CornerRadius="10">
                             <ScrollViewer x:Name="PART_ContentHost" 
-                                        Margin="{TemplateBinding Padding}"
-                                        VerticalAlignment="Center"/>
+                                         Margin="{TemplateBinding Padding}"
+                                         VerticalAlignment="Center"
+                                         Focusable="False"
+                                         HorizontalScrollBarVisibility="Hidden"
+                                         VerticalScrollBarVisibility="Hidden"
+                                         Foreground="{TemplateBinding Foreground}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="BorderBrush">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#667eea" Offset="0"/>
-                                            <GradientStop Color="#764ba2" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#667eea" BlurRadius="15" ShadowDepth="0" Opacity="0.5"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="BorderBrush" Value="{StaticResource MainGradientBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -156,49 +118,28 @@
             </Setter>
         </Style>
 
-        <!-- Modern Password Box Style Dark -->
+        <!-- Fixed PasswordBox Styles with Visible Text -->
         <Style x:Key="ModernPasswordBoxDark" TargetType="PasswordBox">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.1"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.3"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="#26293a"/>
+            <Setter Property="Foreground" Value="#EAEAEA"/>
+            <Setter Property="BorderBrush" Value="#444"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="12,8"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="CaretBrush" Value="White"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="PasswordBox">
                         <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="15">
-                            <ScrollViewer x:Name="PART_ContentHost" 
-                                        Margin="{TemplateBinding Padding}"
-                                        VerticalAlignment="Center"/>
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="BorderBrush">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#667eea" Offset="0"/>
-                                            <GradientStop Color="#764ba2" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#667eea" BlurRadius="15" ShadowDepth="0" Opacity="0.5"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="BorderBrush" Value="{StaticResource MainGradientBrush}"/>
+                                <Setter Property="Background" Value="#30344d"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -206,49 +147,34 @@
             </Setter>
         </Style>
 
-        <!-- Modern Password Box Style Light -->
+
+
         <Style x:Key="ModernPasswordBoxLight" TargetType="PasswordBox">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.9"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Background" Value="#FFFFFF"/>
             <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <SolidColorBrush Color="Gray" Opacity="0.4"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="BorderBrush" Value="{StaticResource GrayBrush4}"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="Padding" Value="15,12,50,12"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="PasswordBox">
                         <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="15">
+                               BorderBrush="{TemplateBinding BorderBrush}"
+                               BorderThickness="{TemplateBinding BorderThickness}"
+                               CornerRadius="10">
                             <ScrollViewer x:Name="PART_ContentHost" 
-                                        Margin="{TemplateBinding Padding}"
-                                        VerticalAlignment="Center"/>
+                                         Margin="{TemplateBinding Padding}"
+                                         VerticalAlignment="Center"
+                                         Focusable="False"
+                                         HorizontalScrollBarVisibility="Hidden"
+                                         VerticalScrollBarVisibility="Hidden"
+                                         Foreground="{TemplateBinding Foreground}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="BorderBrush">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#667eea" Offset="0"/>
-                                            <GradientStop Color="#764ba2" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#667eea" BlurRadius="15" ShadowDepth="0" Opacity="0.5"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="BorderBrush" Value="{StaticResource MainGradientBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -256,18 +182,64 @@
             </Setter>
         </Style>
 
-        <!-- Epic Login Button Style -->
-        <Style x:Key="LoginButton" TargetType="Button">
-            <Setter Property="Background">
+        <!-- Simplified Eye Button Styles -->
+        <Style x:Key="EyeToggleButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{StaticResource WhiteBrush3}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
                 <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#667eea" Offset="0"/>
-                        <GradientStop Color="#764ba2" Offset="1"/>
-                    </LinearGradientBrush>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                               CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="18"/>
+        </Style>
+
+        <Style x:Key="EyeToggleButtonLight" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{StaticResource GrayBrush4}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                               CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource DarkTextBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Simplified Login Button -->
+        <Style x:Key="LoginButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource MainGradientBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="40,15"/>
@@ -276,33 +248,16 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                                CornerRadius="25"
-                                Effect="{TemplateBinding Effect}">
+                               CornerRadius="20">
                             <ContentPresenter HorizontalAlignment="Center" 
                                             VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#667eea" BlurRadius="25" ShadowDepth="0" Opacity="0.8"/>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Background">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#7c8ef0" Offset="0"/>
-                                            <GradientStop Color="#8a5cb8" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="Opacity" Value="0.9"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="RenderTransform">
-                                    <Setter.Value>
-                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="Opacity" Value="0.8"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -310,40 +265,31 @@
             </Setter>
         </Style>
 
-        <!-- Dark TextBlock Style -->
+        <!-- Text Styles -->
         <Style x:Key="TextBlockDark" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
         </Style>
 
-        <!-- Light TextBlock Style -->
         <Style x:Key="TextBlockLight" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkTextBrush}"/>
         </Style>
 
-        <!-- Notification Style -->
+        <!-- Simplified Notification Style -->
         <Style x:Key="NotificationBorder" TargetType="Border">
-            <Setter Property="CornerRadius" Value="15"/>
-            <Setter Property="Padding" Value="20,10"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="5" Opacity="0.3"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="15,8"/>
         </Style>
     </Window.Resources>
 
     <!-- Main Container -->
     <Grid Name="MainGrid">
         <Grid.Background>
-            <RadialGradientBrush GradientOrigin="0.3,0.3">
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="#0f0f23" Offset="0"/>
                 <GradientStop Color="#1a1a2e" Offset="0.5"/>
                 <GradientStop Color="#16213e" Offset="1"/>
-            </RadialGradientBrush>
+            </LinearGradientBrush>
         </Grid.Background>
-
-        <!-- Animated Background Particles -->
-        <Canvas Name="ParticleCanvas" ClipToBounds="True"/>
 
         <!-- Custom Title Bar -->
         <Border Height="50" VerticalAlignment="Top" 
@@ -354,12 +300,12 @@
                            HorizontalAlignment="Left" 
                            VerticalAlignment="Center" 
                            Margin="20,0">
-                    <TextBlock Text="💎" FontSize="20" VerticalAlignment="Center" Name="TitleIcon" Style="{StaticResource TextBlockDark}"/>
+                    <TextBlock Text="💎" FontSize="18" VerticalAlignment="Center" Name="TitleIcon" Style="{StaticResource TextBlockDark}"/>
                     <TextBlock Text="LUXURY JEWELRY STORE - LOGIN" 
-                              FontSize="16" 
+                              FontSize="14" 
                               FontWeight="Bold" 
                               VerticalAlignment="Center" 
-                              Margin="10,0"
+                              Margin="8,0"
                               Name="TitleText"
                               Style="{StaticResource TextBlockDark}"/>
                 </StackPanel>
@@ -370,28 +316,28 @@
                            VerticalAlignment="Center" 
                            Margin="0,0,10,0">
                     <Button Content="🌙" 
-                           Width="40" Height="30" 
+                           Width="35" Height="28" 
                            Background="Transparent" 
-                           Foreground="White" 
+                           Foreground="{StaticResource WhiteBrush}" 
                            BorderThickness="0" 
-                           FontSize="14"
+                           FontSize="12"
                            Click="ThemeToggle_Click"
                            Cursor="Hand"
                            Name="ThemeToggleButton"/>
                     <Button Content="−" 
-                           Width="40" Height="30" 
+                           Width="35" Height="28" 
                            Background="Transparent" 
-                           Foreground="White" 
+                           Foreground="{StaticResource WhiteBrush}" 
                            BorderThickness="0" 
-                           FontSize="16"
+                           FontSize="14"
                            Click="Minimize_Click"
                            Cursor="Hand"/>
                     <Button Content="✕" 
-                           Width="40" Height="30" 
+                           Width="35" Height="28" 
                            Background="Transparent" 
                            Foreground="#ff6b6b" 
                            BorderThickness="0" 
-                           FontSize="14"
+                           FontSize="12"
                            Click="Close_Click"
                            Cursor="Hand"/>
                 </StackPanel>
@@ -402,92 +348,83 @@
         <Grid Margin="0,50,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="500"/>
+                <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Left Side - Branding -->
+            <!-- Left Side - Simplified Branding -->
             <Grid Grid.Column="0">
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50">
-                    <!-- Animated Logo -->
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40">
+                    <!-- Simple Logo -->
                     <Border Name="LogoBorder" 
-                            Width="200" Height="200" 
-                            CornerRadius="100"
-                            Margin="0,0,0,30">
-                        <Border.Background>
-                            <RadialGradientBrush>
-                                <GradientStop Color="#667eea" Offset="0"/>
-                                <GradientStop Color="#764ba2" Offset="0.7"/>
-                                <GradientStop Color="Transparent" Offset="1"/>
-                            </RadialGradientBrush>
-                        </Border.Background>
-                        <Border.Effect>
-                            <DropShadowEffect Color="#667eea" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/>
-                        </Border.Effect>
+                            Width="120" Height="120" 
+                            CornerRadius="60"
+                            Background="{StaticResource MainGradientBrush}"
+                            Margin="0,0,0,20">
                         <TextBlock Text="💎" 
-                                  FontSize="80" 
+                                  FontSize="50" 
                                   HorizontalAlignment="Center" 
                                   VerticalAlignment="Center"
-                                  Foreground="White"/>
+                                  Foreground="{StaticResource WhiteBrush}"/>
                     </Border>
 
                     <TextBlock Text="LUXURY JEWELRY" 
-                              FontSize="36" 
+                              FontSize="28" 
                               FontWeight="Bold" 
                               HorizontalAlignment="Center"
                               Name="BrandTitle"
                               Style="{StaticResource TextBlockDark}"/>
 
                     <TextBlock Text="MANAGEMENT SYSTEM" 
-                              FontSize="24" 
+                              FontSize="18" 
                               FontWeight="Medium" 
                               HorizontalAlignment="Center"
-                              Margin="0,5,0,20"
+                              Margin="0,5,0,15"
                               Name="BrandSubtitle"
                               Style="{StaticResource TextBlockDark}"/>
 
-                    <TextBlock Text="Experience luxury redefined with our premium jewelry management platform" 
-                              FontSize="16" 
+                    <TextBlock Text="Experience luxury with our premium jewelry platform" 
+                              FontSize="14" 
                               HorizontalAlignment="Center"
                               TextAlignment="Center"
                               TextWrapping="Wrap"
                               Opacity="0.8"
-                              Margin="0,0,0,30"
+                              Margin="0,0,0,20"
                               Name="BrandDescription"
                               Style="{StaticResource TextBlockDark}"/>
 
-                    <!-- Floating Features -->
-                    <StackPanel Name="FeaturesPanel" Opacity="0">
+                    <!-- Simplified Features -->
+                    <StackPanel Name="FeaturesPanel">
                         <Border Background="#667eea" 
-                                CornerRadius="20" 
-                                Padding="15,10" 
-                                Margin="0,5"
+                                CornerRadius="15" 
+                                Padding="12,8" 
+                                Margin="0,4"
                                 Style="{StaticResource NotificationBorder}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="🔒" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBlock Text="Advanced Security" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
+                                <TextBlock Text="🔒" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Advanced Security" FontSize="12" Foreground="{StaticResource WhiteBrush}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
                         <Border Background="#764ba2" 
-                                CornerRadius="20" 
-                                Padding="15,10" 
-                                Margin="0,5"
+                                CornerRadius="15" 
+                                Padding="12,8" 
+                                Margin="0,4"
                                 Style="{StaticResource NotificationBorder}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="📊" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBlock Text="Real-time Analytics" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
+                                <TextBlock Text="📊" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Real-time Analytics" FontSize="12" Foreground="{StaticResource WhiteBrush}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
                         <Border Background="#43e97b" 
-                                CornerRadius="20" 
-                                Padding="15,10" 
-                                Margin="0,5"
+                                CornerRadius="15" 
+                                Padding="12,8" 
+                                Margin="0,4"
                                 Style="{StaticResource NotificationBorder}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="💍" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBlock Text="Inventory Management" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
+                                <TextBlock Text="💍" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Inventory Management" FontSize="12" Foreground="{StaticResource WhiteBrush}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -499,67 +436,97 @@
                     Name="LoginBorder"
                     Style="{StaticResource GlassPanelDark}"
                     VerticalAlignment="Center"
-                    Height="600"
+                    Height="500"
                     Margin="20">
 
-                <StackPanel VerticalAlignment="Center" Margin="50">
+                <StackPanel VerticalAlignment="Center" Margin="40">
                     <!-- Login Header -->
                     <TextBlock Text="✨ Welcome Back ✨" 
-                              FontSize="28" 
+                              FontSize="24" 
                               FontWeight="Bold" 
                               HorizontalAlignment="Center"
-                              Margin="0,0,0,10"
+                              Margin="0,0,0,8"
                               Name="LoginTitle"
                               Style="{StaticResource TextBlockDark}"/>
 
                     <TextBlock Text="Sign in to access your dashboard" 
-                              FontSize="16" 
+                              FontSize="14" 
                               HorizontalAlignment="Center"
                               Opacity="0.8"
-                              Margin="0,0,0,40"
+                              Margin="0,0,0,30"
                               Name="LoginSubtitle"
                               Style="{StaticResource TextBlockDark}"/>
 
                     <!-- Username Input -->
                     <TextBlock Text="Username" 
-                              FontSize="14" 
+                              FontSize="12" 
                               FontWeight="SemiBold"
-                              Margin="0,0,0,8"
+                              Margin="0,0,0,6"
                               Name="UsernameLabel"
                               Style="{StaticResource TextBlockDark}"/>
 
                     <TextBox Name="UsernameTextBox" 
                             Style="{StaticResource ModernTextBoxDark}"
-                            Height="50"
-                            Margin="0,0,0,25"/>
+                            Height="45"
+                            Margin="0,0,0,20" FontFamily="Segoe UI Black"/>
 
                     <!-- Password Input -->
                     <TextBlock Text="Password" 
-                              FontSize="14" 
-                              FontWeight="SemiBold"
-                              Margin="0,0,0,8"
-                              Name="PasswordLabel"
-                              Style="{StaticResource TextBlockDark}"/>
+                               FontSize="12" 
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,6"
+                               Name="PasswordLabel"
+                               Style="{StaticResource TextBlockDark}"/>
 
-                    <PasswordBox Name="PasswordBox" 
-                                Style="{StaticResource ModernPasswordBoxDark}"
-                                Height="50"
-                                Margin="0,0,0,30"/>
+                    <!-- Password Container with Fixed Layout -->
+                    <!-- Password Container with Fixed Layout -->
+                    <Grid Height="45" Margin="0,0,0,25">
+                        <!-- PasswordBox -->
+                        <!-- PasswordBox -->
+                        <PasswordBox Name="PasswordBox" 
+             Style="{StaticResource ModernPasswordBoxDark}"
+             Height="45"
+             Padding="15,8,45,8" 
+             FontFamily="Segoe UI"
+             FontWeight="Bold"
+             VerticalContentAlignment="Center"/>
+
+                        <!-- TextBox (for show password) -->
+                        <TextBox Name="PasswordTextBox" 
+         Style="{StaticResource ModernTextBoxDark}"
+         Height="45"
+         Visibility="Collapsed"
+         Padding="15,8,45,8"
+         FontFamily="Segoe UI"
+         FontWeight="Bold"
+         VerticalContentAlignment="Center"/>
+
+
+                        <!-- Eye Toggle Button -->
+                        <Button Name="EyeToggleButton"
+            Content="👁"
+            Style="{StaticResource EyeToggleButton}"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Margin="0,0,10,0"
+            Width="30" Height="30" Click="EyeToggleButton_Click"/>
+                    </Grid>
+
 
                     <!-- Error Message -->
                     <Border Name="ErrorBorder" 
                             Visibility="Collapsed"
                             Background="#ff6b6b"
-                            CornerRadius="10"
-                            Padding="15,10"
-                            Margin="0,0,0,20"
+                            CornerRadius="8"
+                            Padding="12,8"
+                            Margin="0,0,0,15"
                             Style="{StaticResource NotificationBorder}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="❌" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="❌" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Name="ErrorText" 
                                       Text="Invalid username or password!" 
-                                      FontSize="14" 
-                                      Foreground="White" 
+                                      FontSize="12" 
+                                      Foreground="{StaticResource WhiteBrush}" 
                                       VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
@@ -568,66 +535,66 @@
                     <Button Name="LoginButton"
                            Content="🚀 LOGIN TO DASHBOARD"
                            Style="{StaticResource LoginButton}"
-                           Height="60"
+                           Height="50"
                            Click="LoginButton_Click"
-                           Margin="0,0,0,30"/>
+                           Margin="0,0,0,25"/>
 
                     <!-- Footer -->
                     <StackPanel Orientation="Horizontal" 
                                HorizontalAlignment="Center"
                                Opacity="0.6">
                         <TextBlock Text="🔐 Secure Login • " 
-                                  FontSize="12"
+                                  FontSize="10"
                                   Name="FooterText1"
                                   Style="{StaticResource TextBlockDark}"/>
                         <TextBlock Text="Protected by Advanced Encryption" 
-                                  FontSize="12"
+                                  FontSize="10"
                                   Name="FooterText2"
                                   Style="{StaticResource TextBlockDark}"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <!-- Right Side - Stats Preview -->
+            <!-- Right Side - Simplified Stats -->
             <Grid Grid.Column="2">
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50" Name="StatsPreview" Opacity="0">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40" Name="StatsPreview">
                     <!-- Mini Stats Cards -->
                     <Border Background="#43e97b" 
-                            CornerRadius="20" 
-                            Padding="20,15" 
-                            Margin="0,10"
-                            Width="250"
+                            CornerRadius="15" 
+                            Padding="15,12" 
+                            Margin="0,8"
+                            Width="200"
                             Style="{StaticResource NotificationBorder}">
                         <StackPanel>
-                            <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Today's Sales" FontSize="14" Foreground="White" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-                            <TextBlock Text="₹2,45,000" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Text="💰" FontSize="20" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Today's Sales" FontSize="12" Foreground="{StaticResource WhiteBrush}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            <TextBlock Text="₹2,45,000" FontSize="16" FontWeight="Bold" Foreground="{StaticResource WhiteBrush}" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 
                     <Border Background="#4facfe" 
-                            CornerRadius="20" 
-                            Padding="20,15" 
-                            Margin="0,10"
-                            Width="250"
+                            CornerRadius="15" 
+                            Padding="15,12" 
+                            Margin="0,8"
+                            Width="200"
                             Style="{StaticResource NotificationBorder}">
                         <StackPanel>
-                            <TextBlock Text="👥" FontSize="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Active Customers" FontSize="14" Foreground="White" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-                            <TextBlock Text="1,247" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Text="👥" FontSize="20" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Active Customers" FontSize="12" Foreground="{StaticResource WhiteBrush}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            <TextBlock Text="1,247" FontSize="16" FontWeight="Bold" Foreground="{StaticResource WhiteBrush}" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 
                     <Border Background="#f093fb" 
-                            CornerRadius="20" 
-                            Padding="20,15" 
-                            Margin="0,10"
-                            Width="250"
-                           Style="{StaticResource NotificationBorder}">
+                            CornerRadius="15" 
+                            Padding="15,12" 
+                            Margin="0,8"
+                            Width="200"
+                            Style="{StaticResource NotificationBorder}">
                         <StackPanel>
-                            <TextBlock Text="⏳" FontSize="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Pending Orders" FontSize="14" Foreground="White" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-                            <TextBlock Text="23" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Text="⏳" FontSize="20" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Pending Orders" FontSize="12" Foreground="{StaticResource WhiteBrush}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            <TextBlock Text="23" FontSize="16" FontWeight="Bold" Foreground="{StaticResource WhiteBrush}" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -637,19 +604,19 @@
         <!-- Success Notification -->
         <Border Name="SuccessNotification"
                 Background="#43e97b"
-                CornerRadius="15"
-                Padding="20,15"
+                CornerRadius="12"
+                Padding="18,12"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                Margin="0,100,0,0"
+                Margin="0,80,0,0"
                 Visibility="Collapsed"
-               Style="{StaticResource NotificationBorder}">
+                Style="{StaticResource NotificationBorder}">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="✅" FontSize="20" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                <TextBlock Text="✅" FontSize="18" VerticalAlignment="Center" Margin="0,0,12,0"/>
                 <TextBlock Text="Login Successful! Redirecting to Dashboard..." 
-                          FontSize="16" 
+                          FontSize="14" 
                           FontWeight="Bold"
-                          Foreground="White" 
+                          Foreground="{StaticResource WhiteBrush}" 
                           VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
