@@ -778,6 +778,15 @@ namespace JewelryStoreWPF
                 animationTimer?.Start();
             }
         }
+
+        private void InventoryBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var inventoryPage = new InventoryPage();
+            Application.Current.MainWindow = inventoryPage;
+            inventoryPage.Show();
+            // Close login window
+            this.Close();
+        }
     }
 
     // Data models remain the same

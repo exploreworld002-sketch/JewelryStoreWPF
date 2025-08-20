@@ -1,0 +1,1197 @@
+﻿<Window x:Class="JewelryStoreWPF.InventoryPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="💎 Inventory Management" 
+        Height="1080" Width="1920"
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        RenderOptions.BitmapScalingMode="HighQuality">
+
+    <Window.Resources>
+        <!-- Dark Theme Glassmorphism Style -->
+        <Style x:Key="GlassPanelDark" TargetType="Border">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="White" Opacity="0.05"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="White" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Light Theme Glassmorphism Style -->
+        <Style x:Key="GlassPanelLight" TargetType="Border">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="White" Opacity="0.9"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="#CCCCCC" Opacity="0.6"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="8" ShadowDepth="1" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern Button Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#667eea" Offset="0"/>
+                        <GradientStop Color="#764ba2" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="25,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="18"
+                                Effect="{TemplateBinding Effect}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#667eea" BlurRadius="20" ShadowDepth="0" Opacity="0.7"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#7c8ef0" Offset="0"/>
+                                            <GradientStop Color="#8a5cb8" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Action Button Style -->
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="65"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#667eea" BlurRadius="10" ShadowDepth="0" Opacity="0.6"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern TextBox Style - FIXED for both themes -->
+        <Style x:Key="ModernTextBoxDark" TargetType="TextBox">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="Black" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="White" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        VerticalAlignment="Center"
+                                        Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernTextBoxLight" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        VerticalAlignment="Center"
+                                        Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern ComboBox Style - FIXED for both themes -->
+        <Style x:Key="ModernComboBoxDark" TargetType="ComboBox">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="Black" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="White" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton Name="ToggleButton" 
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Focusable="False"
+                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                        ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="30"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="1" 
+                                                      HorizontalAlignment="Center" 
+                                                      VerticalAlignment="Center" 
+                                                      Data="M 0 0 L 4 4 L 8 0 Z" 
+                                                      Fill="White"/>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite"
+                                            IsHitTestVisible="False"
+                                            Content="{TemplateBinding SelectionBoxItem}"
+                                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                            Margin="{TemplateBinding Padding}"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"/>
+                            <Popup Name="Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Grid Name="DropDown"
+                                      SnapsToDevicePixels="True"
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border Background="#2a2a2a"
+                                            BorderBrush="#555555"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                        <ScrollViewer>
+                                            <StackPanel IsItemsHost="True"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Padding" Value="12,8"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBoxItem">
+                                    <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#667eea"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernComboBoxLight" TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton Name="ToggleButton" 
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Focusable="False"
+                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                        ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="30"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="1" 
+                                                      HorizontalAlignment="Center" 
+                                                      VerticalAlignment="Center" 
+                                                      Data="M 0 0 L 4 4 L 8 0 Z" 
+                                                      Fill="#666666"/>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite"
+                                            IsHitTestVisible="False"
+                                            Content="{TemplateBinding SelectionBoxItem}"
+                                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                            Margin="{TemplateBinding Padding}"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"/>
+                            <Popup Name="Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Grid Name="DropDown"
+                                      SnapsToDevicePixels="True"
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border Background="White"
+                                            BorderBrush="#CCCCCC"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                        <ScrollViewer>
+                                            <StackPanel IsItemsHost="True"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#333333"/>
+                        <Setter Property="Padding" Value="12,8"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBoxItem">
+                                    <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#E6F3FF"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Navigation Button Styles -->
+        <Style x:Key="NavButtonDark" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="12" 
+                                Margin="10,5">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="NavButtonLight" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="12" 
+                                Margin="10,5">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ListView Styles -->
+        <Style x:Key="ListViewDark" TargetType="ListView">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+
+        <Style x:Key="ListViewLight" TargetType="ListView">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+
+        <Style x:Key="ListViewItemDark" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                Padding="{TemplateBinding Padding}">
+                            <GridViewRowPresenter Content="{TemplateBinding Content}" 
+                                                Columns="{TemplateBinding GridView.ColumnCollection}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="#667eea" Opacity="0.3"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ListViewItemLight" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                Padding="{TemplateBinding Padding}">
+                            <GridViewRowPresenter Content="{TemplateBinding Content}" 
+                                                Columns="{TemplateBinding GridView.ColumnCollection}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="#667eea" Opacity="0.2"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Text Styles -->
+        <Style x:Key="TextBlockDark" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="TextBlockLight" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#333333"/>
+        </Style>
+
+        <!-- GridView Header Styles -->
+        <Style x:Key="GridViewHeaderDark" TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#444444"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <Style x:Key="GridViewHeaderLight" TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Main container with same structure as MainWindow -->
+    <Grid Name="MainGrid">
+        <Grid.Background>
+            <RadialGradientBrush GradientOrigin="0.3,0.3" RadiusX="0.8" RadiusY="0.8">
+                <GradientStop Color="#0f0f23" Offset="0"/>
+                <GradientStop Color="#1a1a2e" Offset="0.5"/>
+                <GradientStop Color="#16213e" Offset="1"/>
+            </RadialGradientBrush>
+        </Grid.Background>
+
+        <!-- Particle Canvas -->
+        <Canvas Name="ParticleCanvas" ClipToBounds="True" IsHitTestVisible="False"/>
+
+        <!-- Custom Title Bar -->
+        <Border Height="50" VerticalAlignment="Top" 
+                Background="Transparent" 
+                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid>
+                <StackPanel Orientation="Horizontal" 
+                           HorizontalAlignment="Left" 
+                           VerticalAlignment="Center" 
+                           Margin="20,0">
+                    <TextBlock Text="💎" FontSize="20" VerticalAlignment="Center" Name="TitleIcon" Style="{StaticResource TextBlockDark}"/>
+                    <TextBlock Text="INVENTORY MANAGEMENT" 
+                              FontSize="16" 
+                              FontWeight="Bold" 
+                              VerticalAlignment="Center" 
+                              Margin="10,0"
+                              Name="TitleText"
+                              Style="{StaticResource TextBlockDark}"/>
+                </StackPanel>
+
+                <!-- Window Controls -->
+                <StackPanel Orientation="Horizontal" 
+                           HorizontalAlignment="Right" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0">
+                    <Button Content="🌙" 
+                           Width="40" Height="30" 
+                           Background="Transparent" 
+                           Foreground="White" 
+                           BorderThickness="0" 
+                           FontSize="14"
+                           Click="ThemeToggle_Click"
+                           Cursor="Hand"
+                           Name="ThemeToggleButton"/>
+                    <Button x:Name="btnMinimized" Content="−" 
+                           Width="40" Height="30" 
+                           Background="Transparent" 
+                           Foreground="White" 
+                           BorderThickness="0" 
+                           FontSize="16"
+                           Click="Minimize_Click"
+                           Cursor="Hand"/>
+                    <Button Content="✕" 
+                           Width="40" Height="30" 
+                           Background="Transparent" 
+                           Foreground="#ff6b6b" 
+                           BorderThickness="0" 
+                           FontSize="14"
+                           Click="Close_Click"
+                           Cursor="Hand"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Grid with Sidebar -->
+        <Grid Margin="0,50,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Glassmorphism Sidebar -->
+            <Border Grid.Column="0" Name="SidebarBorder" Style="{StaticResource GlassPanelDark}" Margin="20">
+                <Grid>
+                    <StackPanel Margin="0,25,0,0" Name="NavigationPanel">
+                        <!-- Navigation Menu -->
+                        <Button Content="🏠  Dashboard" Name="DashboardBtn" Style="{StaticResource NavButtonDark}" Click="DashboardBtn_Click"/>
+                        <Button Content="👥  Customers" Name="CustomersBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="💎  Inventory" Name="InventoryBtn" Style="{StaticResource NavButtonDark}" Background="#667eea"/>
+                        <Button Content="💰  Sales" Name="SalesBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="🛒  Purchase" Name="PurchaseBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="📊  Analytics" Name="AnalyticsBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="📈  Reports" Name="ReportsBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="⚙️  Settings" Name="SettingsBtn" Style="{StaticResource NavButtonDark}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Main Content Area -->
+            <ScrollViewer Grid.Column="1" 
+                         VerticalScrollBarVisibility="Auto" 
+                         HorizontalScrollBarVisibility="Disabled"
+                         Margin="20">
+                <StackPanel Margin="0,0,20,0">
+                    <!-- Header Section -->
+                    <Border CornerRadius="25" Margin="0,0,0,30" Name="WelcomeBorder">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#667eea" Offset="0"/>
+                                <GradientStop Color="#764ba2" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Border.Effect>
+                            <DropShadowEffect Color="#667eea" BlurRadius="25" ShadowDepth="0" Opacity="0.4"/>
+                        </Border.Effect>
+                        <Grid Height="140">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Margin="45">
+                                <TextBlock Text="💎 Inventory Management" 
+                                          FontSize="32" 
+                                          FontWeight="Bold" 
+                                          Foreground="White" Margin="0,0,0,50"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Statistics Cards -->
+                    <Grid Margin="0,0,0,35">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Total Items -->
+                        <Border Grid.Column="0" CornerRadius="20" Margin="0,0,15,0" Height="120">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#43e97b" Offset="0"/>
+                                    <GradientStop Color="#38f9d7" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#43e97b" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+                            </Border.Effect>
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="📦" FontSize="36" HorizontalAlignment="Center"/>
+                                <TextBlock Name="TotalItemsText" Text="Total: 0" 
+                                          FontSize="20" FontWeight="Bold" Foreground="White" 
+                                          HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                <TextBlock Text="Items in Stock" FontSize="12" Foreground="White" 
+                                          Opacity="0.8" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Active Items -->
+                        <Border Grid.Column="1" CornerRadius="20" Margin="15,0" Height="120">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#4facfe" Offset="0"/>
+                                    <GradientStop Color="#00f2fe" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#4facfe" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+                            </Border.Effect>
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="✅" FontSize="36" HorizontalAlignment="Center"/>
+                                <TextBlock Name="ActiveItemsText" Text="Active: 0" 
+                                          FontSize="20" FontWeight="Bold" Foreground="White" 
+                                          HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                <TextBlock Text="Available Items" FontSize="12" Foreground="White" 
+                                          Opacity="0.8" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Low Stock -->
+                        <Border Grid.Column="2" CornerRadius="20" Margin="15,0" Height="120">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#f093fb" Offset="0"/>
+                                    <GradientStop Color="#f5576c" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#f093fb" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+                            </Border.Effect>
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="⚠️" FontSize="36" HorizontalAlignment="Center"/>
+                                <TextBlock Name="LowStockText" Text="Low Stock: 0" 
+                                          FontSize="20" FontWeight="Bold" Foreground="White" 
+                                          HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                <TextBlock Text="Need Reorder" FontSize="12" Foreground="White" 
+                                          Opacity="0.8" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Total Value -->
+                        <Border Grid.Column="3" CornerRadius="20" Margin="15,0,0,0" Height="120">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#667eea" Offset="0"/>
+                                    <GradientStop Color="#764ba2" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#667eea" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+                            </Border.Effect>
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="💰" FontSize="36" HorizontalAlignment="Center"/>
+                                <TextBlock Name="TotalValueText" Text="₹0" 
+                                          FontSize="20" FontWeight="Bold" Foreground="White" 
+                                          HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                <TextBlock Text="Inventory Value" FontSize="12" Foreground="White" 
+                                          Opacity="0.8" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Add/Edit Item Section -->
+                    <Border Name="FormBorder" Style="{StaticResource GlassPanelDark}" Margin="0,0,0,35">
+                        <StackPanel Margin="35">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,25">
+                                <TextBlock Text="➕ Add New Item" 
+                                          Name="FormTitle"
+                                          FontSize="24" 
+                                          FontWeight="Bold"
+                                          Style="{StaticResource TextBlockDark}"/>
+                            </StackPanel>
+
+                            <!-- Input Form with better alignment -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Row 1 -->
+                                <StackPanel Grid.Column="0" Grid.Row="0">
+                                    <TextBlock Text="Product Name *" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBox Name="txtProductName" Style="{StaticResource ModernTextBoxDark}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Grid.Row="0">
+                                    <TextBlock Text="Category *" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <ComboBox Name="cmbCategory" Style="{StaticResource ModernComboBoxDark}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="4" Grid.Row="0">
+                                    <TextBlock Text="SKU Code *" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBox Name="txtSKU" Style="{StaticResource ModernTextBoxDark}"/>
+                                </StackPanel>
+
+                                <!-- Row 2 -->
+                                <StackPanel Grid.Column="0" Grid.Row="2">
+                                    <TextBlock Text="Quantity *" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBox Name="txtQuantity" Style="{StaticResource ModernTextBoxDark}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Grid.Row="2">
+                                    <TextBlock Text="Purchase Price *" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBox Name="txtPurchasePrice" Style="{StaticResource ModernTextBoxDark}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="4" Grid.Row="2">
+                                    <TextBlock Text="Selling Price *" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBox Name="txtSellingPrice" Style="{StaticResource ModernTextBoxDark}"/>
+                                </StackPanel>
+
+                                <!-- Row 3 -->
+                                <StackPanel Grid.Column="0" Grid.Row="4">
+                                    <TextBlock Text="Min Stock Level *" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBox Name="txtMinStock" Style="{StaticResource ModernTextBoxDark}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Grid.Row="4">
+                                    <TextBlock Text="Metal Type" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <ComboBox Name="cmbMetalType" Style="{StaticResource ModernComboBoxDark}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="4" Grid.Row="4">
+                                    <TextBlock Text="Weight (grams)" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBox Name="txtWeight" Style="{StaticResource ModernTextBoxDark}"/>
+                                </StackPanel>
+
+                                <!-- Description (full width) -->
+                                <StackPanel Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="5">
+                                    <TextBlock Text="Description" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBox Name="txtDescription" Style="{StaticResource ModernTextBoxDark}" 
+                                            Height="90" TextWrapping="Wrap" AcceptsReturn="True" 
+                                            VerticalContentAlignment="Top" Padding="15,12"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Action Buttons -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,30,0,0">
+                                <Button Content="💾 Save Item" Name="btnSave" Style="{StaticResource ModernButton}" 
+                                       Margin="0,0,15,0" Click="SaveItem_Click" Padding="30,15"/>
+                                <Button Content="✏️ Update Item" Name="btnUpdate" Style="{StaticResource ModernButton}" 
+                                       Margin="0,0,15,0" Click="UpdateItem_Click" Visibility="Collapsed" Padding="30,15"/>
+                                <Button Content="🗑️ Clear Form" Name="btnClear" Click="ClearForm_Click" 
+                                       Background="Transparent" BorderBrush="#667eea" BorderThickness="2" 
+                                       Foreground="#667eea" Cursor="Hand" Padding="25,15" FontWeight="Bold">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="18">
+                                                <ContentPresenter HorizontalAlignment="Center" 
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                <GradientStop Color="#667eea" Offset="0"/>
+                                                                <GradientStop Color="#764ba2" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="Effect">
+                                                        <Setter.Value>
+                                                            <DropShadowEffect Color="#667eea" BlurRadius="15" 
+                                                                            ShadowDepth="0" Opacity="0.6"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Search and Filter Section -->
+                    <Border Name="SearchBorder" Style="{StaticResource GlassPanelDark}" Margin="0,0,0,35">
+                        <StackPanel Margin="35">
+                            <TextBlock Text="🔍 Search and Filter" 
+                                      FontSize="24" 
+                                      FontWeight="Bold" 
+                                      Margin="0,0,0,25"
+                                      Style="{StaticResource TextBlockDark}"/>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Search Products" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBox Name="txtSearch" Style="{StaticResource ModernTextBoxDark}" 
+                                            TextChanged="SearchBox_TextChanged"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Category Filter" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <ComboBox Name="cmbFilterCategory" Style="{StaticResource ModernComboBoxDark}" 
+                                             SelectionChanged="FilterCategory_SelectionChanged"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="4">
+                                    <TextBlock Text="Status Filter" Style="{StaticResource TextBlockDark}" 
+                                              FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <ComboBox Name="cmbFilterStatus" Style="{StaticResource ModernComboBoxDark}" 
+                                             SelectionChanged="FilterStatus_SelectionChanged"/>
+                                </StackPanel>
+
+                                <Button Grid.Column="6" Content="🔄 Reset Filters" VerticalAlignment="Bottom" Height="45" 
+                                       Background="Transparent" BorderBrush="White" BorderThickness="1.5" Foreground="White" 
+                                       Cursor="Hand" Click="ResetFilters_Click" Padding="20,0" FontWeight="SemiBold">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="12">
+                                                <ContentPresenter HorizontalAlignment="Center" 
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <SolidColorBrush Color="White" Opacity="0.15"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Inventory List Section -->
+                    <Border Name="InventoryBorder" Style="{StaticResource GlassPanelDark}">
+                        <StackPanel Margin="35">
+                            <!-- Header with better alignment -->
+                            <Grid Margin="0,0,0,25">
+                                <TextBlock Text="📦 Inventory Items" 
+                                          FontSize="24" 
+                                          FontWeight="Bold"
+                                          Style="{StaticResource TextBlockDark}"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- ListView with premium styling -->
+                            <ListView Name="InventoryListView" 
+                                     MinHeight="500"
+                                     Style="{StaticResource ListViewDark}"
+                                     ItemContainerStyle="{StaticResource ListViewItemDark}"
+                                     SelectionChanged="InventoryListView_SelectionChanged"
+                                     Background="Transparent">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="PRODUCT" Width="220">
+                                            <GridViewColumn.HeaderContainerStyle>
+                                                <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderDark}"/>
+                                            </GridViewColumn.HeaderContainerStyle>
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding ProductName}" FontWeight="Bold" FontSize="15"/>
+                                                        <TextBlock Text="{Binding SKU}" FontSize="12" Opacity="0.7" 
+                                                                  Margin="0,4,0,0" FontStyle="Italic"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="CATEGORY" Width="130" DisplayMemberBinding="{Binding Category}">
+                                            <GridViewColumn.HeaderContainerStyle>
+                                                <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderDark}"/>
+                                            </GridViewColumn.HeaderContainerStyle>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="STOCK" Width="100">
+                                            <GridViewColumn.HeaderContainerStyle>
+                                                <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderDark}"/>
+                                            </GridViewColumn.HeaderContainerStyle>
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel HorizontalAlignment="Center">
+                                                        <TextBlock Text="{Binding Quantity}" FontWeight="Bold" FontSize="18" 
+                                                                  HorizontalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding MinStock, StringFormat='Min: {0}'}" 
+                                                                  FontSize="11" Opacity="0.6" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="PURCHASE PRICE" Width="140" DisplayMemberBinding="{Binding PurchasePrice, StringFormat='₹{0:N0}'}">
+                                            <GridViewColumn.HeaderContainerStyle>
+                                                <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderDark}"/>
+                                            </GridViewColumn.HeaderContainerStyle>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="SELLING PRICE" Width="140" DisplayMemberBinding="{Binding SellingPrice, StringFormat='₹{0:N0}'}">
+                                            <GridViewColumn.HeaderContainerStyle>
+                                                <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderDark}"/>
+                                            </GridViewColumn.HeaderContainerStyle>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="STATUS" Width="120">
+                                            <GridViewColumn.HeaderContainerStyle>
+                                                <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderDark}"/>
+                                            </GridViewColumn.HeaderContainerStyle>
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Border CornerRadius="12" Padding="10,6">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Status}" Value="Active">
+                                                                        <Setter Property="Background" Value="#43e97b"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Status}" Value="Low Stock">
+                                                                        <Setter Property="Background" Value="#f093fb"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Status}" Value="Out of Stock">
+                                                                        <Setter Property="Background" Value="#ff6b6b"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Status}" Value="Inactive">
+                                                                        <Setter Property="Background" Value="#666666"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <TextBlock Text="{Binding Status}" 
+                                                                  Foreground="White" 
+                                                                  FontSize="12" 
+                                                                  FontWeight="Bold"
+                                                                  HorizontalAlignment="Center"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="ACTIONS" Width="140">
+                                            <GridViewColumn.HeaderContainerStyle>
+                                                <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderDark}"/>
+                                            </GridViewColumn.HeaderContainerStyle>
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <Button Content="Edit" Style="{StaticResource ActionButton}" 
+                                                               Background="#4facfe" Foreground="White" 
+                                                               Click="EditItem_Click" Tag="{Binding}" 
+                                                               Margin="0,0,8,0"/>
+                                                        <Button Content="Del" Style="{StaticResource ActionButton}" 
+                                                               Background="#ff6b6b" Foreground="White" 
+                                                               Click="DeleteItem_Click" Tag="{Binding}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                            <!-- Empty State -->
+                            <Grid Name="EmptyStatePanel" Visibility="Collapsed" Height="350">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="📦" FontSize="64" HorizontalAlignment="Center" Opacity="0.4" Margin="0,0,0,25"/>
+                                    <TextBlock Text="No inventory items found" 
+                                              FontSize="22" 
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Style="{StaticResource TextBlockDark}"
+                                              Opacity="0.7"/>
+                                    <TextBlock Text="Add your first item to get started" 
+                                              FontSize="16" 
+                                              HorizontalAlignment="Center"
+                                              Margin="0,15,0,0"
+                                              Style="{StaticResource TextBlockDark}"
+                                              Opacity="0.5"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

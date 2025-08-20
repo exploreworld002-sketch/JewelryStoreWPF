@@ -414,7 +414,7 @@
                         <!-- Navigation Menu -->
                         <Button Content="🏠  Dashboard" Name="DashboardBtn" Style="{StaticResource NavButtonDark}" Background="#667eea"/>
                         <Button Content="👥  Customers" Name="CustomersBtn" Style="{StaticResource NavButtonDark}"/>
-                        <Button Content="💍  Inventory" Name="InventoryBtn" Style="{StaticResource NavButtonDark}"/>
+                        <Button Content="💍  Inventory" Name="InventoryBtn" Style="{StaticResource NavButtonDark}" Click="InventoryBtn_Click"/>
                         <Button Content="💰  Sales" Name="SalesBtn" Style="{StaticResource NavButtonDark}"/>
                         <Button Content="🛒  Purchase" Name="PurchaseBtn" Style="{StaticResource NavButtonDark}"/>
                         <Button Content="📊  Analytics" Name="AnalyticsBtn" Style="{StaticResource NavButtonDark}"/>
