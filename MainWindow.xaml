@@ -380,7 +380,7 @@
                            Click="ThemeToggle_Click"
                            Cursor="Hand"
                            Name="ThemeToggleButton"/>
-                    <Button Content="−" 
+                    <Button x:Name="btnMinimized" Content="−" 
                            Width="40" Height="30" 
                            Background="Transparent" 
                            Foreground="White" 
@@ -454,7 +454,7 @@
                                           FontSize="16" 
                                           Foreground="White" 
                                           Opacity="0.8" 
-                                          Margin="0,10,0,0"/>
+                                          Margin="0,10,0,0" Height="38"/>
                             </StackPanel>
                         </Grid>
                     </Border>

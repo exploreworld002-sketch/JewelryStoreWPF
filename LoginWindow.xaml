@@ -324,7 +324,7 @@
                            Click="ThemeToggle_Click"
                            Cursor="Hand"
                            Name="ThemeToggleButton"/>
-                    <Button Content="−" 
+                    <Button x:Name="btnMinimized" Content="−" 
                            Width="35" Height="28" 
                            Background="Transparent" 
                            Foreground="{StaticResource WhiteBrush}" 

@@ -19,7 +19,6 @@ namespace JewelryStoreWPF
         private DispatcherTimer clockTimer;
         private List<Ellipse> particles;
         private Random random = new Random();
-        private bool isDarkMode = true;
         private bool isAnimationEnabled = true;
         private int animationFrameSkip = 0;
 
@@ -43,6 +42,7 @@ namespace JewelryStoreWPF
 
         public MainWindow()
         {
+            
             // Initialize data first
             InitializeData();
 
@@ -55,6 +55,7 @@ namespace JewelryStoreWPF
             StartOptimizedAnimations();
             CreateOptimizedParticles();
             DrawOptimizedChart();
+            ApplyOptimizedTheme();
         }
 
         private void InitializeData()
@@ -336,7 +337,7 @@ namespace JewelryStoreWPF
                 var dayLabel = new TextBlock
                 {
                     Text = days[i],
-                    Foreground = isDarkMode ? Brushes.White : new SolidColorBrush(Color.FromRgb(51, 51, 51)),
+                    Foreground = App.IsDarkMode ? Brushes.White : new SolidColorBrush(Color.FromRgb(51, 51, 51)),
                     FontSize = 12,
                     FontWeight = FontWeights.Bold,
                     HorizontalAlignment = HorizontalAlignment.Center
@@ -349,7 +350,7 @@ namespace JewelryStoreWPF
                 var valueLabel = new TextBlock
                 {
                     Text = $"₹{salesData[i]:N0}K",
-                    Foreground = isDarkMode ? Brushes.White : new SolidColorBrush(Color.FromRgb(51, 51, 51)),
+                    Foreground = App.IsDarkMode ? Brushes.White : new SolidColorBrush(Color.FromRgb(51, 51, 51)),
                     FontSize = 10,
                     FontWeight = FontWeights.Bold,
                     HorizontalAlignment = HorizontalAlignment.Center,
@@ -593,7 +594,7 @@ namespace JewelryStoreWPF
         {
             try
             {
-                isDarkMode = !isDarkMode;
+                App.IsDarkMode = !App.IsDarkMode;
                 ApplyOptimizedTheme();
             }
             catch (Exception ex)
@@ -606,7 +607,7 @@ namespace JewelryStoreWPF
         {
             try
             {
-                ThemeToggleButton.Content = isDarkMode ? "🌙" : "☀️";
+                ThemeToggleButton.Content = App.IsDarkMode ? "🌙" : "☀️";
 
                 // Use cached gradients
                 RadialGradientBrush gradientBrush = CreateOptimizedGradient();
@@ -630,8 +631,11 @@ namespace JewelryStoreWPF
 
         private RadialGradientBrush CreateOptimizedGradient()
         {
-            if (isDarkMode)
+            if (App.IsDarkMode)
             {
+                //manually making minimized button white  on dark theme
+                btnMinimized.Foreground = new SolidColorBrush(Colors.White);
+
                 return new RadialGradientBrush
                 {
                     GradientOrigin = new Point(0.3, 0.3),
@@ -645,6 +649,9 @@ namespace JewelryStoreWPF
             }
             else
             {
+                //manually making minimized button dark black on light theme
+                btnMinimized.Foreground = new SolidColorBrush(Colors.Black);
+
                 return new RadialGradientBrush
                 {
                     GradientOrigin = new Point(0.3, 0.3),
@@ -662,11 +669,11 @@ namespace JewelryStoreWPF
         {
             try
             {
-                var glassStyle = isDarkMode ? cachedDarkGlassStyle : cachedLightGlassStyle;
-                var navStyle = isDarkMode ? cachedDarkNavStyle : cachedLightNavStyle;
-                var textStyle = isDarkMode ? cachedDarkTextStyle : cachedLightTextStyle;
-                var listStyle = isDarkMode ? cachedDarkListStyle : cachedLightListStyle;
-                var listItemStyle = isDarkMode ? cachedDarkListItemStyle : cachedLightListItemStyle;
+                var glassStyle = App.IsDarkMode ? cachedDarkGlassStyle : cachedLightGlassStyle;
+                var navStyle = App.IsDarkMode ? cachedDarkNavStyle : cachedLightNavStyle;
+                var textStyle = App.IsDarkMode ? cachedDarkTextStyle : cachedLightTextStyle;
+                var listStyle = App.IsDarkMode ? cachedDarkListStyle : cachedLightListStyle;
+                var listItemStyle = App.IsDarkMode ? cachedDarkListItemStyle : cachedLightListItemStyle;
 
                 // Apply styles using cached references
                 if (glassStyle != null)
@@ -684,6 +691,7 @@ namespace JewelryStoreWPF
                     CustomersBtn.Style = navStyle;
                     InventoryBtn.Style = navStyle;
                     SalesBtn.Style = navStyle;
+
                     PurchaseBtn.Style = navStyle;
                     AnalyticsBtn.Style = navStyle;
                     ReportsBtn.Style = navStyle;
@@ -713,7 +721,7 @@ namespace JewelryStoreWPF
                 // FIXED: Apply header styles for better appearance
                 ApplyGridViewHeaderStyles();
 
-                ThemeToggleButton.Foreground = isDarkMode ? Brushes.White : new SolidColorBrush(Color.FromRgb(51, 51, 51));
+                ThemeToggleButton.Foreground = App.IsDarkMode ? Brushes.White : new SolidColorBrush(Color.FromRgb(51, 51, 51));
             }
             catch (Exception ex)
             {
@@ -725,7 +733,7 @@ namespace JewelryStoreWPF
         {
             try
             {
-                var headerStyle = isDarkMode ? cachedDarkHeaderStyle : cachedLightHeaderStyle;
+                var headerStyle = App.IsDarkMode ? cachedDarkHeaderStyle : cachedLightHeaderStyle;
 
                 if (headerStyle != null && SalesListView?.View is GridView gridView)
                 {

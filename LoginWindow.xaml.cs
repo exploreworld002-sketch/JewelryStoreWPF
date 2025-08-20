@@ -10,12 +10,11 @@ namespace JewelryStoreWPF
 {
     public partial class LoginWindow : Window
     {
-        private bool isDarkMode = true;
         private bool isPasswordVisible = false;
 
         // Login credentials
-        private const string VALID_USERNAME = "admin";
-        private const string VALID_PASSWORD = "admin";
+        private const string VALID_USERNAME = "akshat";
+        private const string VALID_PASSWORD = "akshat";
 
         public LoginWindow()
         {
@@ -163,7 +162,7 @@ namespace JewelryStoreWPF
         {
             try
             {
-                Style eyeStyle = isDarkMode ?
+                Style eyeStyle = App.IsDarkMode ?
                     FindResource("EyeToggleButton") as Style :
                     FindResource("EyeToggleButtonLight") as Style;
 
@@ -309,7 +308,7 @@ namespace JewelryStoreWPF
         {
             try
             {
-                isDarkMode = !isDarkMode;
+                App.IsDarkMode = !App.IsDarkMode;
                 ApplyTheme();
             }
             catch (Exception ex)
@@ -322,13 +321,15 @@ namespace JewelryStoreWPF
         {
             try
             {
+                App.IsDarkMode = App.IsDarkMode;
+
                 // Update theme toggle button
-                ThemeToggleButton.Content = isDarkMode ? "🌙" : "☀️";
+                ThemeToggleButton.Content = App.IsDarkMode ? "🌙" : "☀️";
 
                 // Create simple gradient brushes for background
                 LinearGradientBrush gradientBrush;
 
-                if (isDarkMode)
+                if (App.IsDarkMode)
                 {
                     // Apply dark theme
                     gradientBrush = new LinearGradientBrush
@@ -370,7 +371,7 @@ namespace JewelryStoreWPF
                 var themeAnimation = new DoubleAnimation(0.9, 1.0, TimeSpan.FromMilliseconds(200));
                 MainGrid.BeginAnimation(OpacityProperty, themeAnimation);
 
-                System.Diagnostics.Debug.WriteLine($"Theme changed to: {(isDarkMode ? "Dark" : "Light")}");
+                System.Diagnostics.Debug.WriteLine($"Theme changed to: {(App.IsDarkMode ? "Dark" : "Light")}");
             }
             catch (Exception ex)
             {
@@ -422,6 +423,8 @@ namespace JewelryStoreWPF
                 }
 
                 ThemeToggleButton.Foreground = Brushes.White;
+                //manually making minimized button white  on dark theme
+                btnMinimized.Foreground = new SolidColorBrush(Colors.White);
             }
             catch (Exception ex)
             {
@@ -437,10 +440,12 @@ namespace JewelryStoreWPF
                 var resources = new[]
                 {
                     new { Element = (FrameworkElement)LoginBorder, StyleKey = "GlassPanelLight" },
-                    new { Element = (FrameworkElement)UsernameTextBox, StyleKey = "ModernTextBoxLight" },
-                    new { Element = (FrameworkElement)PasswordTextBox, StyleKey = "ModernTextBoxLight" },
-                    new { Element = (FrameworkElement)PasswordBox, StyleKey = "ModernPasswordBoxLight" },
                     new { Element = (FrameworkElement)EyeToggleButton, StyleKey = "EyeToggleButtonLight" }
+                    #region commenting because its text boxes also being white and the text under it not showing
+                    //new { Element = (FrameworkElement)UsernameTextBox, StyleKey = "ModernTextBoxLight" },
+                    //new { Element = (FrameworkElement)PasswordTextBox, StyleKey = "ModernTextBoxLight" },
+                    //new { Element = (FrameworkElement)PasswordBox, StyleKey = "ModernPasswordBoxLight" },
+                   #endregion
                 };
 
                 foreach (var item in resources)
@@ -473,6 +478,7 @@ namespace JewelryStoreWPF
                 }
 
                 ThemeToggleButton.Foreground = new SolidColorBrush(Color.FromRgb(51, 51, 51));
+                btnMinimized.Foreground = new SolidColorBrush(Colors.Black);
             }
             catch (Exception ex)
             {
